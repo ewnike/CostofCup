@@ -1491,3 +1491,4 @@
 /venv/Lib/site-packages/psycopg2-2.9.9.dist-info/RECORD filter=lfs diff=lfs merge=lfs -text
 /venv/Lib/site-packages/psycopg2-2.9.9.dist-info/REQUESTED filter=lfs diff=lfs merge=lfs -text
 /venv/Lib/site-packages/psycopg2-2.9.9.dist-info/WHEEL filter=lfs diff=lfs merge=lfs -text
+*.sql filter=lfs diff=lfs merge=lfs -text
