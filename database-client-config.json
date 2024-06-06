@@ -1,0 +1,220 @@
+{
+  "database": {},
+  "nosql": {
+    "1716500480064": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "dbType": "SSH",
+      "name": "postgres_connection",
+      "advance": {
+        "hideSystemSchema": true,
+        "groupingTables": false
+      },
+      "treeFeatures": [],
+      "timezone": "+00:00",
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "sshConnect": {
+        "host": "ssh.pythonanywhere.com",
+        "port": 5432,
+        "username": "super",
+        "type": "auto",
+        "privateKeyPath": "~\\.ssh\\id_rsa",
+        "serverType": "linux",
+        "algorithms": {
+          "kex": [
+            "ecdh-sha2-nistp256",
+            "ecdh-sha2-nistp384",
+            "ecdh-sha2-nistp521",
+            "diffie-hellman-group-exchange-sha256",
+            "diffie-hellman-group14-sha256",
+            "diffie-hellman-group15-sha512",
+            "diffie-hellman-group16-sha512",
+            "diffie-hellman-group17-sha512",
+            "diffie-hellman-group18-sha512",
+            "diffie-hellman-group14-sha1",
+            "diffie-hellman-group-exchange-sha1"
+          ],
+          "cipher": [
+            "aes128-gcm@openssh.com",
+            "aes256-gcm@openssh.com",
+            "aes128-ctr",
+            "aes192-ctr",
+            "aes256-ctr"
+          ],
+          "serverHostKey": [
+            "ecdsa-sha2-nistp256",
+            "ecdsa-sha2-nistp384",
+            "ecdsa-sha2-nistp521",
+            "rsa-sha2-512",
+            "rsa-sha2-256",
+            "ssh-rsa",
+            "ssh-dss"
+          ]
+        },
+        "disableSFTP": false,
+        "pruneSFTPRoot": true,
+        "password": "siads593",
+        "passphrase": "Tahiti541966*"
+      },
+      "global": true,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 11,
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "httpAuth": {
+        "authType": "none"
+      },
+      "key": "1716500480064",
+      "connectionKey": "nosql.connections"
+    },
+    "1716520986766": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "dbType": "SSH",
+      "advance": {
+        "hideSystemSchema": true,
+        "groupingTables": false
+      },
+      "treeFeatures": [],
+      "timezone": "+00:00",
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "sshConnect": {
+        "host": "ssh.pythonanywhere.com",
+        "port": 5432,
+        "username": "ewiniecke",
+        "type": "privateKey",
+        "privateKeyPath": "~\\.ssh\\id_rsa",
+        "serverType": "linux",
+        "algorithms": {
+          "kex": [
+            "ecdh-sha2-nistp256",
+            "ecdh-sha2-nistp384",
+            "ecdh-sha2-nistp521",
+            "diffie-hellman-group-exchange-sha256",
+            "diffie-hellman-group14-sha256",
+            "diffie-hellman-group15-sha512",
+            "diffie-hellman-group16-sha512",
+            "diffie-hellman-group17-sha512",
+            "diffie-hellman-group18-sha512",
+            "diffie-hellman-group14-sha1",
+            "diffie-hellman-group-exchange-sha1"
+          ],
+          "cipher": [
+            "aes128-gcm@openssh.com",
+            "aes256-gcm@openssh.com",
+            "aes128-ctr",
+            "aes192-ctr",
+            "aes256-ctr"
+          ],
+          "serverHostKey": [
+            "ecdsa-sha2-nistp256",
+            "ecdsa-sha2-nistp384",
+            "ecdsa-sha2-nistp521",
+            "rsa-sha2-512",
+            "rsa-sha2-256",
+            "ssh-rsa",
+            "ssh-dss"
+          ]
+        },
+        "disableSFTP": false,
+        "pruneSFTPRoot": true,
+        "password": "Tahiti541966*",
+        "passphrase": "Tahiti541966*"
+      },
+      "global": true,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 12,
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "httpAuth": {
+        "authType": "none"
+      },
+      "key": "1716520986766",
+      "connectionKey": "nosql.connections"
+    },
+    "1716594113010": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "dbType": "SSH",
+      "advance": {
+        "hideSystemSchema": true,
+        "groupingTables": false
+      },
+      "treeFeatures": [],
+      "timezone": "+00:00",
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "sshConnect": {
+        "host": "ssh.pythonanywhere",
+        "port": 5432,
+        "username": "ewiniecke",
+        "type": "auto",
+        "privateKeyPath": "~\\.ssh\\id_rsa",
+        "serverType": "linux",
+        "algorithms": {
+          "kex": [
+            "ecdh-sha2-nistp256",
+            "ecdh-sha2-nistp384",
+            "ecdh-sha2-nistp521",
+            "diffie-hellman-group-exchange-sha256",
+            "diffie-hellman-group14-sha256",
+            "diffie-hellman-group15-sha512",
+            "diffie-hellman-group16-sha512",
+            "diffie-hellman-group17-sha512",
+            "diffie-hellman-group18-sha512",
+            "diffie-hellman-group14-sha1",
+            "diffie-hellman-group-exchange-sha1"
+          ],
+          "cipher": [
+            "aes128-gcm@openssh.com",
+            "aes256-gcm@openssh.com",
+            "aes128-ctr",
+            "aes192-ctr",
+            "aes256-ctr"
+          ],
+          "serverHostKey": [
+            "ecdsa-sha2-nistp256",
+            "ecdsa-sha2-nistp384",
+            "ecdsa-sha2-nistp521",
+            "rsa-sha2-512",
+            "rsa-sha2-256",
+            "ssh-rsa",
+            "ssh-dss"
+          ]
+        },
+        "disableSFTP": false,
+        "pruneSFTPRoot": true,
+        "password": "Tahiti541966*",
+        "passphrase": "Tahiti541966*"
+      },
+      "global": true,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 13,
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "httpAuth": {
+        "authType": "none"
+      },
+      "key": "1716594113010",
+      "connectionKey": "nosql.connections"
+    }
+  },
+  "$schema": "http://127.0.0.1:8828/schema.json"
+}
