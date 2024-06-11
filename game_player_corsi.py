@@ -1,13 +1,14 @@
 import pandas as pd
 import numpy as np
 
+
 def read_data():
-    game_plays = pd.read_csv(
-        "/kaggle/input/nhl-game-data/game_plays.csv"
-    ).drop_duplicates(ignore_index=True)
-    game_shifts = pd.read_csv(
-        "/kaggle/input/nhl-game-data/game_shifts.csv"
-    ).drop_duplicates(ignore_index=True)
+    game_plays = pd.read_csv("/kaggle/input/nhl-game-data/game_plays.csv").drop_duplicates(
+        ignore_index=True
+    )
+    game_shifts = pd.read_csv("/kaggle/input/nhl-game-data/game_shifts.csv").drop_duplicates(
+        ignore_index=True
+    )
     # game_plays_players = pd.read_csv("/kaggle/input/nhl-game-data/game_plays_players.csv")
     game_skater_stats = pd.read_csv(
         "/kaggle/input/nhl-game-data/game_skater_stats.csv"
