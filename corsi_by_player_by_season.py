@@ -12,7 +12,7 @@ def load_data():
  
     print("load")
     for name in names:
-        df[name] = pd.read_csv(f"/kaggle/input/nhl-game-data/{name}.csv").drop_duplicates(ignore_index=True)
+        df[name] = pd.read_csv(f"\corsi_vals\{name}.csv").drop_duplicates(ignore_index=True)
         t1, t2 = t2, perf_counter()
         print(f"{name:>25}: {t2 - t1:.4g} sec, {len(df[name])} rows")
         #return a dict of df
