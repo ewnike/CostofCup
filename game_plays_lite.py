@@ -25,16 +25,16 @@ tables = ["game_plays", "game_shifts", "game_skater_stats"]
 for table in tables:
     # Define the query to read data from the current table
     query = f"SELECT * FROM {table} LIMIT {num_rows}"
-    
+
     # Read the data from the current table
     df = pd.read_sql_query(query, engine)
-    
+
     # Define the output file name
     output_file = f"{table}_lite.csv"
-    
+
     # Select the top num_rows_per_file rows
     df.head(num_rows).to_csv(output_file, index=False)
-    
+
     print(f"Data has been written to {output_file}")
 
 print("All files have been created.")
