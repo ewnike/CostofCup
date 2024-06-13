@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 
 
-# Cleans a pandas dataframe from a Spotrac URL
 def clean_spo_df(df):
     # columns = df.columns
     # print("Columns as Index object:", columns)
@@ -21,7 +20,8 @@ def clean_spo_df(df):
         "Injured  Long-Term",
     ]
     df = df[["Rank", "Team", "Total Cap Allocations", "Cap Space All"]]
-    return df
+    df_trimmed = df.iloc[:-2]
+    return df_trimmed
 
 
 # Cleans a pandas dataframe from a Cap Friendly URL
@@ -77,6 +77,13 @@ def read_url(urls):
     return total_dfs
 
 
+# Writes .csv files from dfs given a list structured as [type, year, df]
+def write_csv(dfs):
+    for df in dfs:
+        df[2].to_csv(df[0] + "_files/" + df[0] + "_" + df[1] + ".csv")
+    return
+
+
 def main():
     print("Running Main...")
 
@@ -104,6 +111,17 @@ nhl_urls = {
 team_sals_15, team_sals_16, team_sals_17, player_sals_15, player_sals_16, player_sals_17 = read_url(
     nhl_urls
 )
+
+dfs = [
+    ["team", "20151016", team_sals_15],
+    ["team", "20162017", team_sals_16],
+    ["team", "20171018", team_sals_17],
+    ["player", "20151016", player_sals_15],
+    ["player", "20161017", player_sals_16],
+    ["player", "20171018", player_sals_17],
+]
+
+write_csv(dfs)
 
 print(team_sals_15.head())
 print(team_sals_16.head())
