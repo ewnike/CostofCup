@@ -75,5 +75,5 @@ if __name__ == "__main__":
             CA = len(plays_player) - CF
             C = CF - CA
             df_corsi.iloc[i, 3:] = [CF, CA, C]
-        df_corsi["CF_Percent"] = df_corsi["CF"] / (df_corsi["CF"] + df_corsi["CA"])
+        df_corsi["CF_Percent"] = df_corsi["CF"]/(df_corsi["CF"] + df_corsi["CA"])
         df_corsi.to_csv(f"corsi_vals/Corsi_{season}.csv")
