@@ -1,6 +1,5 @@
 import os
 from time import perf_counter
-from pprint import pprint
 import numpy as np 
 import pandas as pd
 ​
@@ -12,7 +11,7 @@ def load_data():
  
     print("load")
     for name in names:
-        df[name] = pd.read_csv(f"\corsi_vals\{name}.csv").drop_duplicates(ignore_index=True)
+        df[name] = pd.read_csv(f"/Kaggle_stats/{name}.csv").drop_duplicates(ignore_index=True)
         t1, t2 = t2, perf_counter()
         print(f"{name:>25}: {t2 - t1:.4g} sec, {len(df[name])} rows")
         #return a dict of df
@@ -80,4 +79,4 @@ if __name__ == "__main__":
             C = CF - CA
             df_corsi.iloc[i, 3:] = [CF, CA, C]
         df_corsi["CF_Percent"] = df_corsi["CF"]/(df_corsi["CF"] + df_corsi["CA"])
-        df_corsi.to_csv(f"/kaggle/working/Corsi_{season}.csv")
+        df_corsi.to_csv(f"corsi_vals/Corsi_{season}.csv")
