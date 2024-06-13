@@ -52,7 +52,7 @@ requests==2.32.3
 rpds-py==0.18.1
 scipy==1.13.1
 six==1.16.0
-soupsieve                 2.5
+soupsieve==2.5
 SQLAlchemy==2.0.30
 stack-data==0.6.3
 toolz==0.12.1
