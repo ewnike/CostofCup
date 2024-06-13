@@ -1,0 +1,7 @@
+{
+    "database": "MADS_NHL",
+    "user": "postgres",
+    "password": "MADS_NHL*",
+    "host": "localhost",
+    "port": "5433"
+}

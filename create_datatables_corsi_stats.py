@@ -3,16 +3,20 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import psycopg2
-import getpass
+#import getpass
+from dotenv import load_dotenv
 
-# Database connection details
-DATABASE_TYPE = "postgresql"
-DBAPI = "psycopg2"
-ENDPOINT = "localhost"
-USER = "postgres"
-PASSWORD = getpass.getpass(prompt="Password: ", stream=None)
-PORT = 5433  # default port for PostgreSQL
-DATABASE = "MADS_NHL"
+# Load environment variables from the .env file
+load_dotenv()
+
+# Retrieve database connection parameters from environment variables
+DATABASE_TYPE = os.getenv('DATABASE_TYPE')
+DBAPI = os.getenv('DBAPI')
+ENDPOINT = os.getenv('ENDPOINT')
+USER = os.getenv('USER')
+PASSWORD = os.getenv('PASSWORD')
+PORT = int(os.getenv('PORT', 5433))  # Provide default value if not set
+DATABASE = os.getenv('DATABASE')
 
 # Create the connection string
 connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}"

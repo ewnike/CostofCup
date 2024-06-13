@@ -109,3 +109,7 @@ venv.bak/
 
 # Zip files
 *.zip
+
+#passwords
+.env
+
