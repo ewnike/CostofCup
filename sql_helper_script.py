@@ -36,7 +36,7 @@ session = Session()
 
 #Enter your query here:
     
-query = 'SELECT * FROM "Corsi_20152016" LIMIT 5;'
+query = 'SELECT * FROM "Corsi_20172018";'
 
 try:
     # Read the SQL query into a DataFrame
@@ -46,7 +46,7 @@ try:
     print(df)
     
     # Save the DataFrame to a CSV file without the index
-    df.to_csv('Corsi_Test.csv', index=False)
+    df.to_csv('conc_corsi_20172018.csv', index=False)
 
 except Exception as e:
     print(f"Error occurred: {e}")
