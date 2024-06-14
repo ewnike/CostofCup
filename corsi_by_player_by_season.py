@@ -1,6 +1,5 @@
 import os
 from time import perf_counter
-from pprint import pprint
 import numpy as np
 import pandas as pd
 
@@ -21,7 +20,7 @@ def load_data():
 
 if __name__ == "__main__":
     df_master = load_data()
-    seasons = [20162017, 20172018, 20182019, 20192020]
+    seasons = [20162016, 20162017, 20172018, 20182019, 20192020]
     for season in seasons:
         df = df_master.copy()
         df["game"] = df["game"].query(f"season == {season}")
