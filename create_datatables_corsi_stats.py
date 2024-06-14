@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import psycopg2
@@ -23,7 +24,7 @@ connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PO
 
 engine = create_engine(connection_string)
 
-directory_path = r"C:\Users\eric\Documents\cost_of_cup\corsi_vals"
+directory_path = r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II"
 
 for filename in os.listdir(directory_path):
     if filename.endswith('.csv'):
