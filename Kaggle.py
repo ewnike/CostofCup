@@ -186,23 +186,19 @@ def join_dfs(season_dfs, salary_dfs):
     joined_dfs = []
 
     if len(season_dfs) == len(salary_dfs):
-        i = 0
-        while i < len(season_dfs) - 1:
-
+        for season_df, salary_df in zip(season_dfs, salary_dfs):
             # Merge season_df with salary_df based on firstName and lastName
             merged_df = pd.merge(
-                season_dfs[i][1],
-                salary_dfs[i][["firstName", "lastName", "CAP HIT", "SALARY"]],
+                season_df[1],
+                salary_df[["firstName", "lastName", "CAP HIT", "SALARY"]],
                 on=["firstName", "lastName"],
                 how="left",
             )
-            i += 1
 
-        # Append the merged dataframe to joined_dfs
-        joined_dfs.append([season_dfs[i][0], merged_df])
+            # Append the merged dataframe to joined_dfs
+            joined_dfs.append([season_df[0], merged_df])
 
     return joined_dfs
-
 
 # Writes csv files for individual NHL seasons from a list of pandas dataframes
 def write_csv(dfs):
@@ -240,20 +236,6 @@ def main():
     )
 
     salary_dfs = [player_sals_15, player_sals_16, player_sals_17]
-
-    final_dfs = merge_dfs(nhl_dfs, salary_dfs)
-
-    dfs = [
-        ["team", "20151016", team_sals_15],
-        ["team", "20162017", team_sals_16],
-        ["team", "20171018", team_sals_17],
-        ["player", "20151016", player_sals_15],
-        ["player", "20161017", player_sals_16],
-        ["player", "20171018", player_sals_17],
-    ]
-
-    salary_dfs = [player_sals_15, player_sals_16, player_sals_17]
-
     final_dfs = join_dfs(nhl_dfs, salary_dfs)
 
     write_csv(final_dfs)
