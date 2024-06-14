@@ -1,5 +1,6 @@
 import os
 from time import perf_counter
+from pprint import pprint
 import numpy as np
 import pandas as pd
 
@@ -18,11 +19,13 @@ def load_data():
         # return a dict of df
     return df
 
-if __name__ == "__main__":
-    df_master = load_data()
-    seasons = [20162016, 20162017, 20172018, 20182019, 20192020]
+
+# Breaks NHL dataframe down into individual seasons
+def organize_by_season(seasons, df):
+    df_orig = df
+    nhl_dfs = []
     for season in seasons:
-        df = df_master.copy()
+        df = df_orig.copy()
         df["game"] = df["game"].query(f"season == {season}")
         # filter games to just 20182019 season
         # when we call df, we are actually calling the keys in the dict of df and this is why we can now call df[]as opposed to df_game....
@@ -49,30 +52,58 @@ if __name__ == "__main__":
         df_corsi = df["game_skater_stats"].sort_values(["game_id", "player_id"], ignore_index=True)[
             ["game_id", "player_id", "team_id"]
         ]
-        df_corsi[["CF", "CA", "C"]] = np.nan
 
-        game_id_prev = None
-        t1 = perf_counter()
-        for i, row in df_corsi.iterrows():
-            game_id, player_id, team_id = row.iloc[:3]
-            if i % 1000 == 0:
-                print(f"{i:>6}/{len(df_corsi)}, {perf_counter() - t1:.2f} s")
-            if game_id != game_id_prev:
-                shifts_game = df["game_shifts"].query(f"game_id == {game_id}")
-                plays_game = df["game_plays"].query(f"game_id == {game_id}")
-            shifts_player = shifts_game.query(f"player_id == {player_id}")
-            mask = (
-                shifts_game["shift_start"].searchsorted(plays_game["time"])
-                - shifts_game["shift_end"].searchsorted(plays_game["time"])
-            ).astype(bool)
-            plays_player = plays_game[mask]
-            # mask was it for or against our team. is it for team of the player whose player_id we are looking at
-            is_our_team = plays_player["team_id_for"] == team_id
-            is_missed_shot = plays_player["event"] == "Missed Shot"
-            CF = (is_our_team ^ is_missed_shot).sum()
-            # number of rows in the df
-            CA = len(plays_player) - CF
-            C = CF - CA
-            df_corsi.iloc[i, 3:] = [CF, CA, C]
-        df_corsi["CF_Percent"] = df_corsi["CF"]/(df_corsi["CF"] + df_corsi["CA"])
-        df_corsi.to_csv(f"corsi_vals/Corsi_{season}.csv")
+        nhl_dfs.append([season, create_corsi_stats(df_corsi, df)])
+
+    return nhl_dfs
+
+
+# Takes a list of pandas dataframes, calculates corsi statistics and adds them to dataframes
+def create_corsi_stats(df_corsi, df):
+    df_corsi[["CF", "CA", "C"]] = np.nan
+
+    game_id_prev = None
+    t1 = perf_counter()
+    for i, row in df_corsi.iterrows():
+        game_id, player_id, team_id = row.iloc[:3]
+        if i % 1000 == 0:
+            print(f"{i:>6}/{len(df_corsi)}, {perf_counter() - t1:.2f} s")
+        if game_id != game_id_prev:
+            shifts_game = df["game_shifts"].query(f"game_id == {game_id}")
+            plays_game = df["game_plays"].query(f"game_id == {game_id}")
+        shifts_player = shifts_game.query(f"player_id == {player_id}")
+        mask = (
+            shifts_game["shift_start"].searchsorted(plays_game["time"])
+            - shifts_game["shift_end"].searchsorted(plays_game["time"])
+        ).astype(bool)
+        plays_player = plays_game[mask]
+        # mask was it for or against our team. is it for team of the player whose player_id we are looking at
+        is_our_team = plays_player["team_id_for"] == team_id
+        is_missed_shot = plays_player["event"] == "Missed Shot"
+        CF = (is_our_team ^ is_missed_shot).sum()
+        # number of rows in the df
+        CA = len(plays_player) - CF
+        C = CF - CA
+        df_corsi.iloc[i, 3:] = [CF, CA, C]
+    df_corsi["CF_Percent"] = df_corsi["CF"] / (df_corsi["CF"] + df_corsi["CA"])
+
+    return df_corsi
+
+
+# Writes csv files for individual NHL seasons from a list of pandas dataframes
+def write_csv(dfs):
+    for df in dfs:
+        df[1].to_csv(f"corsi_vals/Corsi_{df[0]}.csv")
+
+
+def main():
+    df_master = load_data()
+    seasons = [20152016, 20162017, 20172018, 20182019, 20192020]
+
+    nhl_dfs = organize_by_season(seasons, df_master)
+
+    write_csv(nhl_dfs)
+
+
+if __name__ == "__main__":
+    main()
