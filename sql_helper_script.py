@@ -35,7 +35,7 @@ session = Session()
 
 # Enter your query here:
 
-query = 'SELECT * FROM "Corsi_20172018";'
+query = 'SELECT * FROM "Corsi_20162017";'
 
 try:
     # Read the SQL query into a DataFrame
@@ -45,7 +45,7 @@ try:
     print(df)
 
     # Save the DataFrame to a CSV file without the index
-    df.to_csv("conc_corsi_20172018.csv", index=False)
+    df.to_csv("agg_corsi_20162017.csv", index=False)
 
 except Exception as e:
     print(f"Error occurred: {e}")
