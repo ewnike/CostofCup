@@ -39,47 +39,47 @@ try:
     # Add new columns to each table
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
+        
         add_columns_query = text(f"""
             ALTER TABLE "{table_name}"
-            ADD COLUMN IF NOT EXISTS toi BIGINT;
+            ADD COLUMN IF NOT EXISTS salary VARCHAR,
+            ADD COLUMN IF NOT EXISTS cap_hit VARCHAR;
         """)
         
-        try:
-            session.execute(add_columns_query)
-            session.commit()  # Commit column additions immediately
-            print(f"Added new column 'toi' to {file_name} successfully.")
-        except SQLAlchemyError as e:
-            session.rollback()
-            print(f"Error adding column to {file_name}: {e}")
+        session.execute(add_columns_query)
+        print(f"Added new columns to {file_name} successfully.")
+    
+    # Commit column additions
+    session.commit()
 
-    # Construct and execute SQL UPDATE statement for each table
+    # Construct SQL UPDATE statement
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
+        year_suffix = table_name[-8:]  # Extract year suffix from table name
+        player_table = f"player_{year_suffix}"
+        
         update_query = text(f"""
-            UPDATE "{table_name}" AS c
+            UPDATE {table_name} AS c
             SET
-                toi = gss."timeOnIce"
-            FROM game_skater_stats AS gss
-            WHERE c.player_id = gss.player_id
-            AND c.game_id = gss.game_id
+                cap_hit = p."CAP HIT",
+                salary = p."SALARY"
+            FROM {player_table} AS p
+            WHERE c.player_id = p.player_id
         """)
         
         try:
             session.execute(update_query)
             session.commit()  # Commit updates immediately
-            print(f"Updated 'toi' column in {file_name} successfully.")
+            print(f"Updated 'cap_hit, salary' columns in {file_name} successfully.")
         except SQLAlchemyError as e:
             session.rollback()
             print(f"Error updating {file_name}: {e}")
 
 except SQLAlchemyError as e:
-    print(f"General error occurred: {e}")
-    session.rollback()  # Rollback any remaining transaction on general error
-
+    print(f"Error occurred: {e}")
+    session.rollback()  # Rollback the transaction on error
+    
 finally:
-    session.close()  # Ensure session is closed
+    # Close cursor and connection
+    session.close()
 
-    
-    
-
-    

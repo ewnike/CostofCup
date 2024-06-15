@@ -33,10 +33,27 @@ Session = sessionmaker(bind=engine)
 # Create a session
 session = Session()
 
-files_to_update = ['CorsiX_20152016', 'CorsiX_20162017', 'CorsiX_20172018']
-
+files_to_update = ['corsix_20152016', 'corsix_20162017', 'corsix_20172018']
 
 try:
+    # Add new columns to each table
+    for file_name in files_to_update:
+        table_name = file_name.replace(' ', '_').lower()
+        
+        add_columns_query = text(f"""
+            ALTER TABLE "{file_name}"
+            ADD COLUMN IF NOT EXISTS first_name VARCHAR,
+            ADD COLUMN IF NOT EXISTS last_name VARCHAR,
+            ADD COLUMN IF NOT EXISTS primary_position VARCHAR;
+        """)
+        
+        session.execute(add_columns_query)
+        print(f"Added new columns to {file_name} successfully.")
+    
+    # Commit column additions
+    session.commit()
+
+
     #Construct SQL UPDATE statement
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
@@ -51,14 +68,14 @@ try:
             WHERE c.player_id = p.player_id
         """)
         
-    
-     #Execute Update Statement   
-    session.execute(update_query)
-    
-    print(f"Updated {table_name} successfully.")
-    
-    #Commit transactions
-    session.commit()
+        
+        try:
+            session.execute(update_query)
+            session.commit()  # Commit updates immediately
+            print(f"Updated 'first_name, last_name, and primary_position' columns in {file_name} successfully.")
+        except SQLAlchemyError as e:
+            session.rollback()
+            print(f"Error updating {file_name}: {e}")
     
 
 except SQLAlchemyError as e:
