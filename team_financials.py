@@ -109,12 +109,12 @@ def main():
     ]
 
     dfs = [
-        ["team", "20151016", team_sals_15],
+        ["team", "20152016", team_sals_15],
         ["team", "20162017", team_sals_16],
-        ["team", "20171018", team_sals_17],
-        ["player", "20151016", player_sals_15],
-        ["player", "20161017", player_sals_16],
-        ["player", "20171018", player_sals_17],
+        ["team", "20172018", team_sals_17],
+        ["player", "20152016", player_sals_15],
+        ["player", "20162017", player_sals_16],
+        ["player", "20172018", player_sals_17],
     ]
 
     write_csv(dfs)
