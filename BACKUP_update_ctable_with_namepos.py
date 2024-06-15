@@ -41,9 +41,10 @@ try:
         table_name = file_name.replace(' ', '_').lower()
         
         add_columns_query = text(f"""
-            ALTER TABLE "{table_name}"
-            ADD COLUMN IF NOT EXISTS salary VARCHAR,
-            ADD COLUMN IF NOT EXISTS cap_hit VARCHAR;
+            ALTER TABLE "{file_name}"
+            ADD COLUMN IF NOT EXISTS first_name VARCHAR,
+            ADD COLUMN IF NOT EXISTS last_name VARCHAR,
+            ADD COLUMN IF NOT EXISTS primary_position VARCHAR;
         """)
         
         session.execute(add_columns_query)
@@ -52,29 +53,30 @@ try:
     # Commit column additions
     session.commit()
 
-    # Construct SQL UPDATE statement
+
+    #Construct SQL UPDATE statement
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
-        year_suffix = table_name[-8:]  # Extract year suffix from table name
-        player_table = f"player_{year_suffix}"
         
         update_query = text(f"""
             UPDATE {table_name} AS c
             SET
-                cap_hit = p."CAP HIT",
-                salary = p."SALARY"
-            FROM {player_table} AS p
-            WHERE c.first_name = p."firstName"
-            AND c.last_name = p."lastName"
+                first_name = p."firstName",
+                last_name = p."lastName",
+                primary_position = p."primaryPosition"
+            FROM player_info AS p
+            WHERE c.player_id = p.player_id
         """)
+        
         
         try:
             session.execute(update_query)
             session.commit()  # Commit updates immediately
-            print(f"Updated 'cap_hit, salary' columns in {file_name} successfully.")
+            print(f"Updated 'first_name, last_name, and primary_position' columns in {file_name} successfully.")
         except SQLAlchemyError as e:
             session.rollback()
             print(f"Error updating {file_name}: {e}")
+    
 
 except SQLAlchemyError as e:
     print(f"Error occurred: {e}")
@@ -83,4 +85,7 @@ except SQLAlchemyError as e:
 finally:
     # Close cursor and connection
     session.close()
-
+    
+    
+                
+            
