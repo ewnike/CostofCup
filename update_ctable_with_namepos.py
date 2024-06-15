@@ -33,7 +33,7 @@ Session = sessionmaker(bind=engine)
 # Create a session
 session = Session()
 
-files_to_update = ['CorsiX_20152016', 'CorsiX_20162017', 'CorsiX_20172018']
+files_to_update = ['corsix_20152016', 'corsix_20162017', 'corsix_20172018']
 
 
 try:
@@ -41,6 +41,7 @@ try:
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
         
+
         update_query = text(f"""
             UPDATE {table_name} AS c
             SET
@@ -68,6 +69,7 @@ except SQLAlchemyError as e:
 finally:
     # Close cursor and connection
     session.close()
+
     
     
                 

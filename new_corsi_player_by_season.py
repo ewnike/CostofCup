@@ -93,8 +93,7 @@ def create_corsi_stats(df_corsi, df):
 # Writes csv files for individual NHL seasons from a list of pandas dataframes
 def write_csv(dfs):
     for df in dfs:
-        df[1].to_csv(f"corsi_vals_III/Corsi_{df[0]}.csv")
-
+        df[1].to_csv(f"corsi_vals_II/Corsi_{df[0]}.csv")
 
 def main():
     df_master = load_data()
