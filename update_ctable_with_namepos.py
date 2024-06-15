@@ -33,22 +33,43 @@ Session = sessionmaker(bind=engine)
 # Create a session
 session = Session()
 
-# Enter your query here:
+files_to_update ' ['CorsiX_20152016', 'CorsiX_20172018', 'CorsiX_20182019']
 
-query = 'SELECT * FROM "Corsi_20162017";'
+cur=conn.cursor()
 
 try:
-    # Read the SQL query into a DataFrame
-    df = pd.read_sql(query, engine)
-
-    # Print the DataFrame
-    print(df)
-
-    # Save the DataFrame to a CSV file without the index
-    df.to_csv("agg_corsi_20162017.csv", index=False)
-
-except Exception as e:
-    print(f"Error occurred: {e}")
-
+    #Construct SQL UPDATE statement
+    for file_name in files_to_update:
+        table_name = file_name.replace(' ', '_').lower()
+        
+        update_query = sql.SQL("""
+            UPDATE {} AS c
+            SET
+                first_name = p.first_name,
+                last_name = p.last_name,
+                primary_position = p.primary_position
+            FROM player_info AS p
+            WHERE c.player_id = p.player_id
+        """).format(sql.Identifier(table_name))
+        
+    
+     #Execute Update Statement   
+    cur.execute(update_query)
+    
+    print(f"Updated {table_name} successfully.")
+    
+    #Commit transactions
+    conn.commit()
+    
+except psycopg2.Error as e:
+    print(f"Error updating data: {e}")
+    conn.rollback()
+    
 finally:
-    engine.dispose()  # Close the engine
+    # Close cursor and connection
+    cur.close()
+    conn.close()
+    
+    
+                
+            
