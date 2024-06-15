@@ -182,6 +182,7 @@ def create_corsi_stats(df_corsi, df):
 
     return df_corsi
 
+
 def join_dfs(season_dfs, salary_dfs):
     joined_dfs = []
 
@@ -200,10 +201,11 @@ def join_dfs(season_dfs, salary_dfs):
 
     return joined_dfs
 
+
 # Writes csv files for individual NHL seasons from a list of pandas dataframes
 def write_csv(dfs):
     for df in dfs:
-        df[1].to_csv(f"corsi_vals/Corsi_{df[0]}.csv", index=False)
+        df[1].to_csv(f"TEMP_corsi_vals/TEMP_Corsi_{df[0]}.csv", index=False)
 
 
 def main():
