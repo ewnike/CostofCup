@@ -33,42 +33,41 @@ Session = sessionmaker(bind=engine)
 # Create a session
 session = Session()
 
-files_to_update ' ['CorsiX_20152016', 'CorsiX_20172018', 'CorsiX_20182019']
+files_to_update = ['CorsiX_20152016', 'CorsiX_20162017', 'CorsiX_20172018']
 
-cur=conn.cursor()
 
 try:
     #Construct SQL UPDATE statement
     for file_name in files_to_update:
         table_name = file_name.replace(' ', '_').lower()
         
-        update_query = sql.SQL("""
-            UPDATE {} AS c
+        update_query = text(f"""
+            UPDATE {table_name} AS c
             SET
-                first_name = p.first_name,
-                last_name = p.last_name,
-                primary_position = p.primary_position
+                first_name = p."firstName",
+                last_name = p."lastName",
+                primary_position = p."primaryPosition"
             FROM player_info AS p
             WHERE c.player_id = p.player_id
-        """).format(sql.Identifier(table_name))
+        """)
         
     
      #Execute Update Statement   
-    cur.execute(update_query)
+    session.execute(update_query)
     
     print(f"Updated {table_name} successfully.")
     
     #Commit transactions
-    conn.commit()
+    session.commit()
     
-except psycopg2.Error as e:
-    print(f"Error updating data: {e}")
-    conn.rollback()
+
+except SQLAlchemyError as e:
+    print(f"Error occurred: {e}")
+    session.rollback()  # Rollback the transaction on error
     
 finally:
     # Close cursor and connection
-    cur.close()
-    conn.close()
+    session.close()
     
     
                 

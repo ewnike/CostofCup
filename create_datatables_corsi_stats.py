@@ -25,7 +25,7 @@ connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PO
 engine = create_engine(connection_string)
 
 directories = [
-    r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_I",
+    r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II",
     r"C:\Users\eric\Documents\cost_of_cup\Kaggle_stats",
     r"C:\Users\eric\Documents\cost_of_cup\team_files",
     r"C:\Users\eric\Documents\cost_of_cup\player_files"
