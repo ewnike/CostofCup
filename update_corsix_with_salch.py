@@ -35,6 +35,9 @@ session = Session()
 
 files_to_update = ['corsix_20152016', 'corsix_20162017', 'corsix_20172018']
 
+# Directory containing the CSV files
+csv_directory = r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II"
+
 try:
     # Add new columns to each table
     for file_name in files_to_update:
@@ -70,11 +73,21 @@ try:
         
         try:
             session.execute(update_query)
-            session.commit()  # Commit updates immediately
+            session.commit()  # Commit updates immediately            
             print(f"Updated 'cap_hit, salary' columns in {file_name} successfully.")
+            
         except SQLAlchemyError as e:
             session.rollback()
             print(f"Error updating {file_name}: {e}")
+            
+    # If all database transactions are successful, update the CSV files
+    for file_name in files_to_update:
+        csv_file_path = os.path.join(csv_directory, f"{file_name}.csv")
+        df = pd.read_sql_table(table_name, engine)
+
+        # Write the DataFrame back to the CSV file
+        df.to_csv(csv_file_path, index=False)
+        print(f"Updated CSV file: {csv_file_path}")
 
 except SQLAlchemyError as e:
     print(f"Error occurred: {e}")
