@@ -32,7 +32,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-directory_path = r"C:\Users\eric\Documents\cost_of_cup\team_files"
+directory_path = r"C:\Users\eric\Documents\cost_of_cup\Kaggle_stats"
 
 for filename in os.listdir(directory_path):
     if filename.endswith('.csv'):
@@ -48,3 +48,7 @@ for filename in os.listdir(directory_path):
             print(f"Table '{table_name}' created successfully.")
         except SQLAlchemyError as e:
             print(f"Error occurred while creating table '{table_name}': {e}")
+            session.rollback() #rollback the transaction error
+        finally:
+            session.close()
+            
