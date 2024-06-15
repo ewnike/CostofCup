@@ -95,7 +95,6 @@ def write_csv(dfs):
     for df in dfs:
         df[1].to_csv(f"corsi_vals_II/Corsi_{df[0]}.csv")
 
-
 def main():
     df_master = load_data()
     seasons = [20152016, 20162017, 20172018]
