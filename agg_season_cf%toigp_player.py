@@ -42,21 +42,29 @@ for filename in os.listdir(csv_dir):
         print(df.head())
         
         agg_df = df.dropna(subset=['salary', 'CF_Percent'])
-        grouped_agg_df = agg_df.groupby('player_id').agg({'team_id': 'first', 'first_name' : 'first' , 'last_name': 'first', 'cap_hit': 'first', 'salary': 'first','CF_Percent': 'mean', 'toi': 'mean'}).reset_index()
+        grouped_agg_df = agg_df.groupby(['player_id', 'team_id']).agg({ 'first_name' : 'first' , 'last_name': 'first', 'cap_hit': 'first', 'salary': 'first','CF_Percent': 'mean', 'toi': 'mean'}).reset_index()
         
-        # Count the number of games played for each player_id
-        df_counts = agg_df.groupby('player_id').size().reset_index(name='games_played')
+        # Count the number of games played for each player_id per team
+        df_counts_per_team = agg_df.groupby(['player_id', 'team_id']).size().reset_index(name='games_played')
+        
+        # Calculate the total number of games played for each player_id across all teams
+        df_counts_total = df_counts_per_team.groupby('player_id')['games_played'].sum().reset_index(name='total_games_played')
+        
+        # Merge the per-team game counts with the grouped data
+        df_agg_final = pd.merge(grouped_agg_df, df_counts_per_team, on=['player_id', 'team_id'])
+        
+        # Merge the total game counts with the final data
+        df_agg_final = pd.merge(df_agg_final, df_counts_total, on='player_id')
+        
+        # Filter rows where 'total_games_played' > 56 (82 * 0.68)
+        df_agg_filtered = df_agg_final[df_agg_final['total_games_played'] > 82 * 0.68]
+        
+       # Sort the final DataFrame by 'total_games_played' in descending order and reset the index
+        df_agg_sorted = df_agg_filtered.sort_values(by='total_games_played', ascending=False).reset_index(drop=True)
 
-        # Merge the aggregated data with the counts
-        df_agg_final = pd.merge(grouped_agg_df, df_counts, on='player_id')
-
-        # Filter rows where 'games_played' > 56 (82 * 0.68) keeping players that have only played in 68% of the reg season games.
-        df_agg_final = df_agg_final[df_agg_final['games_played'] > 82 * 0.68]
-
-        # Sort the final DataFrame by 'games_played' in descending order
-        df_agg_sorted = df_agg_final.sort_values(by='games_played', ascending=False).reset_index(drop=True)
+        # Display the first few rows of the sorted and reset DataFrame
+        print(f"Sorted and Reset DataFrame ({filename} by total games played in descending order):")
         print(df_agg_sorted.head())
-        print(df_agg_sorted.shape)
         
         # Save the sorted and reset DataFrame to a new CSV file and dir
         processed_filename = f"processed_{filename}"
