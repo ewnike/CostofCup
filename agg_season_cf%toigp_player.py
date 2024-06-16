@@ -23,6 +23,11 @@ engine = create_engine(connection_string)
 
 
 csv_dir = r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II"
+processed_directory = r"C:\Users\eric\Documents\cost_of_cup\processed_files"
+
+# Create the processed files directory if it doesn't exist
+os.makedirs(processed_directory, exist_ok=True)
+
 
 
 # Iterate over all CSV files in the directory
@@ -53,14 +58,14 @@ for filename in os.listdir(csv_dir):
         print(df_agg_sorted.head())
         print(df_agg_sorted.shape)
         
-        # Save the sorted and reset DataFrame to a new CSV file
+        # Save the sorted and reset DataFrame to a new CSV file and dir
         processed_filename = f"processed_{filename}"
-        processed_file_path = os.path.join(csv_dir, processed_filename)
+        processed_file_path = os.path.join(processed_directory, processed_filename)
         df_agg_sorted.to_csv(processed_file_path, index=False)
 
         print(f"Processed DataFrame saved to {processed_file_path}")
         
-                # Insert the processed data into a new table in the database
+        # Insert the processed data into a new table in the database
         table_name = f"{os.path.splitext(filename)[0]}_processed"
         try:
             df_agg_sorted.to_sql(table_name, engine, index=False, if_exists='replace')

@@ -32,7 +32,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-directory_path = r"C:\Users\eric\Documents\cost_of_cup\player_files"
+directory_path = r"C:\Users\eric\Documents\cost_of_cup\team_files"
 
 for filename in os.listdir(directory_path):
     if filename.endswith('.csv'):

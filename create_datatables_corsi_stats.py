@@ -44,6 +44,13 @@ for directory_path in directories:
 
             # Define the table name (without the .csv extension)
             table_name = os.path.splitext(filename)[0]
+            
+            # Special handling for player_ and team_ files
+            if filename.startswith('player_') or filename.startswith('team_'):
+                df = pd.read_csv(file_path, index_col=None)
+            else:
+                df = pd.read_csv(file_path)
+                
             # Write the DataFrame to the SQL database
             try:
                 df.to_sql(table_name, engine, index=False, if_exists='replace')
