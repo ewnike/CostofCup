@@ -59,6 +59,9 @@ for filename in os.listdir(csv_dir):
         # Filter rows where 'total_games_played' > 56 (82 * 0.68)
         df_agg_filtered = df_agg_final[df_agg_final['total_games_played'] > 82 * 0.68]
         
+                # Adjust CF% by multiplying by 100 and rounding to 4 decimal places
+        df_agg_filtered['CF%_adjusted'] = (df_agg_filtered['CF_Percent'] * 100).round(4)
+        
        # Sort the final DataFrame by 'total_games_played' in descending order and reset the index
         df_agg_sorted = df_agg_filtered.sort_values(by='total_games_played', ascending=False).reset_index(drop=True)
 
@@ -80,3 +83,5 @@ for filename in os.listdir(csv_dir):
             print(f"Table '{table_name}' created successfully in the database.")
         except SQLAlchemyError as e:
             print(f"Error occurred while creating table '{table_name}': {e}")
+            
+            
