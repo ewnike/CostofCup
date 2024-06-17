@@ -4,8 +4,17 @@ import sys
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 import psycopg2
-
 from dotenv import load_dotenv
+import psutil  # You may need to install this package
+
+# Check if available memory is below a certain threshold (e.g., 100MB)
+memory_threshold = 100 * 1024 * 1024  # 100 MB in bytes
+available_memory = psutil.virtual_memory().available
+
+memory_low = available_memory < memory_threshold
+
+if memory_low:
+    print('Memory is low!')
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -27,6 +36,7 @@ engine = create_engine(connection_string)
 directories = [
     r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II",
     r"C:\Users\eric\Documents\cost_of_cup\Kaggle_stats",
+    r"C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats",
     r"C:\Users\eric\Documents\cost_of_cup\team_files",
     r"C:\Users\eric\Documents\cost_of_cup\player_files"
     # Add more directories as needed
@@ -40,7 +50,13 @@ for directory_path in directories:
         if filename.endswith('.csv'):
             # Load the CSV file into a pandas DataFrame
             file_path = os.path.join(directory_path, filename)
-            df = pd.read_csv(file_path)
+            df = pd.read_csv(file_path, index_col=None)
+            
+            if memory_low:
+                # Use chunksize to handle large files if memory is low
+                df = pd.read_csv(file_path, chunksize=10000, index_col=None)
+            else:
+                df = pd.read_csv(file_path, index_col=None)
 
             # Define the table name (without the .csv extension)
             table_name = os.path.splitext(filename)[0]
@@ -51,10 +67,18 @@ for directory_path in directories:
             else:
                 df = pd.read_csv(file_path)
                 
-            # Write the DataFrame to the SQL database
             try:
-                df.to_sql(table_name, engine, index=False, if_exists='replace')
+                if memory_low:
+                    # Use chunksize to handle large files if memory is low
+                    for chunk in pd.read_csv(file_path, chunksize=10000, index_col=None):
+                        chunk.to_sql(table_name, engine, index=False, if_exists='replace')
+                else:
+                    df = pd.read_csv(file_path, index_col=None)
+                    df.to_sql(table_name, engine, index=False, if_exists='replace')
+                
                 print(f"Table '{table_name}' created successfully.")
             except SQLAlchemyError as e:
                 print(f"Error occurred while creating table '{table_name}': {e}")
+       
+            
 

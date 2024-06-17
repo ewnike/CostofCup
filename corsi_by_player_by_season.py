@@ -20,7 +20,7 @@ def load_data():
 
 if __name__ == "__main__":
     df_master = load_data()
-    seasons = [20152016, 20162017, 20172018, 20182019, 20192020]
+    seasons = [20152016, 20162017, 20172018]
     for season in seasons:
         df = df_master.copy()
         df["game"] = df["game"].query(f"season == {season}")
@@ -75,4 +75,4 @@ if __name__ == "__main__":
             C = CF - CA
             df_corsi.iloc[i, 3:] = [CF, CA, C]
         df_corsi["CF_Percent"] = df_corsi["CF"]/(df_corsi["CF"] + df_corsi["CA"])
-        df_corsi.to_csv(f"corsi_vals/Corsi_{season}.csv")
+        df_corsi.to_csv(f"corsi_vals_II/corsix_{season}.csv")

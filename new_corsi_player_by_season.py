@@ -13,7 +13,7 @@ def load_data():
 
     print("load")
     for name in names:
-        df[name] = pd.read_csv(f"kaggle_stats/{name}.csv").drop_duplicates(ignore_index=True)
+        df[name] = pd.read_csv(f"Kaggle_Big_stats/{name}.csv").drop_duplicates(ignore_index=True)#C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats
         t1, t2 = t2, perf_counter()
         print(f"{name:>25}: {t2 - t1:.4g} sec, {len(df[name])} rows")
         # return a dict of df
@@ -93,7 +93,7 @@ def create_corsi_stats(df_corsi, df):
 # Writes csv files for individual NHL seasons from a list of pandas dataframes
 def write_csv(dfs):
     for df in dfs:
-        df[1].to_csv(f"corsi_vals_II/Corsi_{df[0]}.csv")
+        df[1].to_csv(f"corsi_vals_II/corsix_{df[0]}.csv")
 
 def main():
     df_master = load_data()
