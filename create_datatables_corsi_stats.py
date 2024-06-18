@@ -33,12 +33,12 @@ connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PO
 
 engine = create_engine(connection_string)
 
+
+
 directories = [
-    r"C:\Users\eric\Documents\cost_of_cup\corsi_vals_II",
-    r"C:\Users\eric\Documents\cost_of_cup\Kaggle_stats",
-    r"C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats",
-    r"C:\Users\eric\Documents\cost_of_cup\team_files",
-    r"C:\Users\eric\Documents\cost_of_cup\player_files"
+    #r"C:\Users\eric\Documents\cost_of_cup\Kaggle_stats",
+    #r"C:\Users\eric\Documents\cost_of_cup\team_files",
+    #r"C:\Users\eric\Documents\cost_of_cup\player_files"
     # Add more directories as needed
 ]
 
@@ -50,35 +50,31 @@ for directory_path in directories:
         if filename.endswith('.csv'):
             # Load the CSV file into a pandas DataFrame
             file_path = os.path.join(directory_path, filename)
-            df = pd.read_csv(file_path, index_col=None)
-            
-            if memory_low:
-                # Use chunksize to handle large files if memory is low
-                df = pd.read_csv(file_path, chunksize=10000, index_col=None)
-            else:
-                df = pd.read_csv(file_path, index_col=None)
-
-            # Define the table name (without the .csv extension)
             table_name = os.path.splitext(filename)[0]
             
-            # Special handling for player_ and team_ files
-            if filename.startswith('player_') or filename.startswith('team_'):
-                df = pd.read_csv(file_path, index_col=None)
-            else:
-                df = pd.read_csv(file_path)
-                
             try:
                 if memory_low:
-                    # Use chunksize to handle large files if memory is low
-                    for chunk in pd.read_csv(file_path, chunksize=10000, index_col=None):
+                    for chunk in pd.read_csv(file_path, chunksize=10000, index_col = None):
                         chunk.to_sql(table_name, engine, index=False, if_exists='replace')
-                else:
-                    df = pd.read_csv(file_path, index_col=None)
-                    df.to_sql(table_name, engine, index=False, if_exists='replace')
-                
-                print(f"Table '{table_name}' created successfully.")
+               
+                    else:
+                        df = pd.read_csv(file_path, index_col=None)
+                        df.to_sql(table_name, engine, index=False, if_exists='replace')
+                        
+                    print(f"Table '{table_name}' created successfully.")
+                    
             except SQLAlchemyError as e:
                 print(f"Error occurred while creating table '{table_name}': {e}")
+                
+            except Exception as e:
+                print(f"Error occurred while processing file '{file_path}': {e}")
+                
+
+            
+            
+
+                
+  
        
             
 

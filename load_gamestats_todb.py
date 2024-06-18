@@ -8,14 +8,7 @@ import psycopg2
 from dotenv import load_dotenv
 import psutil  # You may need to install this package
 
-# Check if available memory is below a certain threshold (e.g., 100MB)
-memory_threshold = 100 * 1024 * 1024  # 100 MB in bytes
-available_memory = psutil.virtual_memory().available
 
-memory_low = available_memory < memory_threshold
-
-if memory_low:
-    print('Memory is low!')
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -34,7 +27,7 @@ connection_string = f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PO
 
 engine = create_engine(connection_string)
 
-#directory = [r"C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats"]
+directory = [r"C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats"]
 
 metadata=MetaData()
 
@@ -113,13 +106,7 @@ game_skater_stats = Table(
     Column('shortHandedTimeOnIce', BigInteger),
     Column('powerPlayTimeOnIce', BigInteger)
     )
-#cleaned_data = {k: (None if pd.isna(v) else v) for k, v in game_plays.items()}
-#cleaned_data['dateTime'] = datetime.strptime(cleaned_data['dateTime'], '%Y-%m-%d %H:%M:%S')
 
-# Create a new GamePlay object
-#new_game_play = GamePlay(**cleaned_data)
-
-# Add to the session and commit
 #session.add(new_game_play)  
 tables = [game, game_plays, game_shifts, game_skater_stats]
 metadata.create_all(engine)
@@ -127,15 +114,19 @@ metadata.create_all(engine)
 Session = sessionmaker(bind = engine)
     
 def insert_data_from_csv(session,table,directory,column_mapping):
-    session.execute(table.delete())
-    df=pd.read_csv(directory)
-    for index, row in df.iterrows():
-        data =  {column: row[csv_column] for column, csv_column in column_mapping.items()}
-        session.execute(table.insert().values(**data))
-    session.commit()
-                   
-                
-            
+    try:
+        df=pd.read_csv(directory)
+        for index, row in df.iterrows():
+            data =  {column: row[csv_column] for column, csv_column in column_mapping.items()}
+            session.execute(table.insert().values(**data))
+        session.commit()
+        print(f'Data inserted successfully into {table.name}')   
+    
+    except SQLALchemyError as e:
+        session.rollback()
+        print(f'error inserting data into {table.name}')
+    except FileNotFoundError as e:
+        print(f"File not found: {file_path} - {e}")
             
 csv_files_and_mappings = [
     (r"C:\Users\eric\Documents\cost_of_cup\Kaggle_Big_stats\game.csv", game, {'game_id' : 'game_id', 'season' : 'season', 'type':'type', 'date_time_GMT': 'date_time_GMT', 'away_team_id': 'away_team_id', 'home_team_id' : 'home_team_id', 'away_goals' : 'away_goals', 'home_goals': 'home_goals', 'outcome': 'outcome', 'home_rink_side_start': 'home_rink_side_start','venue':'venue', 'venue_link':'venue_link', 'venue_time_zone_id': 'venue_time_zone_id', 'venue_time_zone_offset':'venue_time_zone_offset', 'venue_time_zone_tz':'venue_time_zone_tz'}),
